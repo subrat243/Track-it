@@ -309,31 +309,6 @@ done
 | Windows 11 | ✅94% | ✅96% | ✅95% | ✅97% | - |
 | macOS Sonoma | ✅96% | ✅98% | ✅93% | - | ✅97% |
 
-## 📝 **Pentest Report Template**
-
-```markdown
-# Universal Zero-Click File Tracking [CVE-XXXX-XXXX]
-
-## Severity
-CVSS: 7.5 High ($600-2500)
-
-## Description
-Files downloadable from target contain embedded trackers that execute on preview/copy.
-
-## Impact
-- Track file opens across WhatsApp/Email
-- Geolocate users via IP
-- Fingerprint via UA/hostname
-- No user interaction required
-
-## PoC
-```bash
-python3 track-it.py vuln.pdf tracked.pdf --url https://c2/beacon
-# Send tracked.pdf → target downloads → 100% hit
-```
-
-## Evidence
-![Dashboard](screenshots/dashboard.png)
 ## 🔗 **Resources**
 - **Ngrok**: https://ngrok.com/download
 - **Cloudflare Tunnel**: https://developers.cloudflare.com/cloudflare-one/
