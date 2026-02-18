@@ -1,0 +1,13 @@
+# Data
+data/c2_hits.db
+data/*.log
+tracked_files/
+
+# Tunnels
+tunnels/*.json
+tunnels/*.yml
+
+# Env
+.env
+*.pyc
+__pycache__/

