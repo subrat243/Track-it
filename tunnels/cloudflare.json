@@ -1,0 +1,8 @@
+{
+  "tunnel": "tracker-ID-FROM-cloudflared",
+  "credentials-file": "/root/.cloudflared/YOUR_CREDENTIALS.json",
+  "ingress": [
+    {"hostname": "tracker.yourdomain.com", "service": "http://localhost:8080"},
+    {"service": "http_status:404"}
+  ]
+}

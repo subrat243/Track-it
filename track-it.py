@@ -110,19 +110,16 @@ class UniversalTracker:
     def universal_track(self, infile, outfile):
         """Detect format + track"""
         ext = Path(infile).suffix.lower()
-        tracker = UniversalTracker(self.c2_url)
-        
         handlers = {
-            '.pdf': tracker.track_pdf,
-            '.jpg': tracker.track_image, '.jpeg': tracker.track_image,
-            '.png': tracker.track_image, '.webp': tracker.track_image,
-            '.docx': tracker.track_doc, '.doc': tracker.track_doc,
-            '.zip': tracker.track_zip, '.rar': tracker.track_zip,
-            '.txt': tracker.track_txt, '.html': tracker.track_html,
-            '.htm': tracker.track_html
+            '.pdf': self.track_pdf,
+            '.jpg': self.track_image, '.jpeg': self.track_image,
+            '.png': self.track_image, '.webp': self.track_image,
+            '.docx': self.track_doc, '.doc': self.track_doc,
+            '.zip': self.track_zip, '.rar': self.track_zip,
+            '.txt': self.track_txt, '.html': self.track_html,
+            '.htm': self.track_html
         }
-        
-        handler = handlers.get(ext, tracker.track_txt)
+        handler = handlers.get(ext, self.track_txt)
         handler(infile, outfile)
 
 def main():

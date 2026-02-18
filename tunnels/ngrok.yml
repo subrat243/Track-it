@@ -1,0 +1,6 @@
+version: "2"
+authtoken: YOUR_NGROK_AUTHTOKEN_HERE
+tunnels:
+  tracker:
+    addr: 8080
+    proto: http

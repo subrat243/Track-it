@@ -23,5 +23,6 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:8080/ || exit 1
 
-# Run
+# Run (DATA_DIR so volume mount works)
+ENV DATA_DIR=/app/data
 CMD ["python", "c2.py"]

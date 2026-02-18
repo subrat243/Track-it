@@ -5,6 +5,7 @@ WhatsApp/Telegram/PDF/Windows • Live Dashboard • SQLite
 """
 
 import base64
+import os
 import sqlite3
 import subprocess
 import threading
@@ -16,10 +17,12 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-DB_PATH = 'c2_hits.db'
+DATA_DIR = os.environ.get('DATA_DIR', 'data')
+DB_PATH = os.path.join(DATA_DIR, 'c2_hits.db')
 
 def init_db():
     """Initialize SQLite database"""
+    os.makedirs(DATA_DIR, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.execute('''CREATE TABLE IF NOT EXISTS hits 
                    (id TEXT, platform TEXT, ip TEXT, host TEXT, ua TEXT, ts TEXT)''')
@@ -37,7 +40,7 @@ def dashboard():
 <!DOCTYPE html>
 <html>
 <head>
-    <title>🎯 Universal C2 Dashboard</title>
+    <title>🎯 Track-it C2 Dashboard</title>
     <meta http-equiv="refresh" content="3">
     <style>
         body {{ font-family: 'Courier New', monospace; background: #0a0a0a; color: #00ff00; margin: 0; padding: 20px; }}
@@ -78,14 +81,14 @@ def dashboard():
             <td class="{platform_class}">{hit[1]}</td>
             <td>{hit[2]}</td>
             <td>{hit[3]}</td>
-            <td style="max-width:300px">{hit[4][:50]}...</td>
-            <td>{hit[5][:19]}</td>
+            <td style="max-width:300px">{(hit[4] or '')[:50]}{'...' if len((hit[4] or '')) > 50 else ''}</td>
+            <td>{(hit[5] or '')[:19]}</td>
         </tr>
         """
     
-    html += """
+    html += f"""
     </table>
-    <p style="margin-top:30px"><b>🔒 Local-only access</b> | DB: c2_hits.db | Auto-refresh: 3s</p>
+    <p style="margin-top:30px"><b>🔒 Local-only access</b> | DB: {DB_PATH} | Auto-refresh: 3s</p>
 </body>
 </html>"""
     
@@ -139,6 +142,6 @@ if __name__ == "__main__":
     expose_tunnel()
     
     print("\n✅ C2 LIVE! Use tunnel URL in tracker:")
-    print("   python3 universal_tracker.py file.pdf tracked.pdf --url YOUR_TUNNEL_URL/beacon")
+    print("   python3 track-it.py file.pdf tracked.pdf --url YOUR_TUNNEL_URL/beacon")
     
     app.run(host='0.0.0.0', port=8080, debug=False)
