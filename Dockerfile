@@ -17,11 +17,11 @@ COPY . .
 RUN mkdir -p /app/data/tracked_files /app/tunnels
 
 # Expose port
-EXPOSE 8080
+EXPOSE 4444
 
 # Healthcheck
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8080/ || exit 1
+  CMD curl -f http://localhost:4444/ || exit 1
 
 # Run (DATA_DIR so volume mount works)
 ENV DATA_DIR=/app/data
