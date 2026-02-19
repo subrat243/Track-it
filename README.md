@@ -181,9 +181,9 @@ python3 track-it.py --url https://tunnel/beacon \
 
 ### **Step 4: Test & Monitor**
 
- **1. Send tracked.pdf → WhatsApp/Email**
- **2. Victim previews file**
- **3. Watch: http://localhost:4444 🎯**
+**1. Send tracked.pdf → WhatsApp/Email**
+**2. Victim previews file**
+**3. Watch: http://localhost:4444 🎯**
 
 
 ## 🛡️ **Security & Compliance**
