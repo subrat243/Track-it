@@ -1,4 +1,4 @@
-# 📖 Track-it: Zero-Click File Tracker
+# 📖 Track-it: Zero-Click Tracker
 
 <div align="center">
   <img src="https://img.shields.io/badge/Status-Live-brightgreen" alt="Status">
