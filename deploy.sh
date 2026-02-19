@@ -5,7 +5,7 @@ echo "🎯 Track-it Deployer"
 echo "======================================="
 
 # Create directories
-mkdir -p data/tracked_files tunnels
+mkdir -p data tunnels
 
 # Create tunnel configs
 if [ ! -f "tunnels/ngrok.yml" ]; then
@@ -36,11 +36,6 @@ fi
 echo "📦 Installing dependencies..."
 pip3 install -r requirements.txt --break-system-packages
 
-# Create sample files
-echo "📄 Creating test files..."
-echo "Sample invoice content" > data/test_invoice.pdf.txt
-echo '<html><body>Test HTML</body></html>' > data/test.html
-
 # Start C2
 echo "🚀 Starting Local C2 Server..."
 echo "🌐 Open http://localhost:4444 after tunnel setup"
@@ -54,7 +49,7 @@ echo "✅ Deployment Complete!"
 echo ""
 echo "📋 NEXT STEPS:"
 echo "1. Start tunnel: ngrok http 4444  (or: ngrok start tracker  if using tunnels/ngrok.yml)"
-echo "2. Track: python3 track-it.py data/test.html tracked.html --url https://YOUR_NGROK_URL/beacon"
+echo "2. Track: python3 track-it.py --url https://abc.ngrok.io --header 'identifier'"
 echo "3. Dashboard: http://localhost:4444"
 echo ""
 echo "Press Ctrl+C to stop C2"

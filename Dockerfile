@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Create dirs
-RUN mkdir -p /app/data/tracked_files /app/tunnels
+RUN mkdir -p /app/data /app/tunnels
 
 # Expose port
 EXPOSE 4444

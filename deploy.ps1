@@ -2,7 +2,7 @@
 Write-Host "🎯 Track-it (Windows)" -ForegroundColor Green
 
 # Create directories
-New-Item -ItemType Directory -Force -Path "data\tracked_files" | Out-Null
+New-Item -ItemType Directory -Force -Path "data" | Out-Null
 New-Item -ItemType Directory -Force -Path "tunnels" | Out-Null
 
 # Create tunnel configs if missing
@@ -35,12 +35,6 @@ if (-not (Test-Path $cloudflarePath)) {
 # Install dependencies
 pip3 install -r requirements.txt
 
-# Create test files
-"Sample invoice content" | Out-File -FilePath "data\test_invoice.txt" -Encoding utf8
-@"
-<html><body>Test HTML for preview tracking</body></html>
-"@ | Out-File -FilePath "data\test.html" -Encoding utf8
-
 Write-Host "🚀 Starting Local C2 Server..." -ForegroundColor Yellow
 Write-Host "🌐 Open http://localhost:4444 after tunnel setup" -ForegroundColor Cyan
 
@@ -52,5 +46,5 @@ Write-Host "`n✅ Deployment Complete!" -ForegroundColor Green
 Write-Host "`n📋 NEXT STEPS:" -ForegroundColor Cyan
 Write-Host "1. Download ngrok: https://ngrok.com/download"
 Write-Host "2. Run: ngrok http 4444  (or: ngrok start tracker  if using tunnels/ngrok.yml)"
-Write-Host "3. Track: python track-it.py data\test.html tracked.html --url https://YOUR_NGROK_URL/beacon"
+Write-Host "3. Track: python track-it.py --url https://abc.ngrok.io --header 'identifier'"
 Write-Host "4. Dashboard: http://localhost:4444"
